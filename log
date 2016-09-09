@@ -1,0 +1,179 @@
+Ball {'p': 'Poke', 'u': ' Ultra', 'g': ' Great'}
+_AttrOrder_ ['Berry', 'Ball', 'Color', 'Type']
+Color {'y': 'Yellow', 'r': ' Red', 'g': ' Green'}
+classes {'y': 'yes', 'n': ' no'}
+Berry {'y': 'yes', 'n': ' no'}
+Type {'p': ' Psychic', 'f': ' Flying', 'w': ' Water', 'n': 'Normal'}
+pokemon/training.data
+Space Entrophy =  [8.0, 8.0, 16.0, 1.0]
+     ~~~~~~~~~~~~ Feature =  Berry ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [6.0, 1.0, 7.0, 0.59167277858232747]
+            Entrophy for  n  =  [2.0, 7.0, 9.0, 0.76420450650862026]
+     ~~~~~~~~~~~~ IG =  0.311278124459 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Ball ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [1.0, 5.0, 6.0, 0.65002242164835411]
+            Entrophy for  u  =  [3.0, 0.0, 3.0, 0]
+            Entrophy for  g  =  [4.0, 3.0, 7.0, 0.98522813603425152]
+     ~~~~~~~~~~~~ IG =  0.325204282367 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [3.0, 4.0, 7.0, 0.98522813603425152]
+            Entrophy for  r  =  [3.0, 3.0, 6.0, 1.0]
+            Entrophy for  g  =  [2.0, 1.0, 3.0, 0.91829583405448956]
+     ~~~~~~~~~~~~ IG =  0.0217822215998 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 2.0, 2.0, 0]
+            Entrophy for  f  =  [3.0, 1.0, 4.0, 0.81127812445913283]
+            Entrophy for  w  =  [2.0, 2.0, 4.0, 1.0]
+            Entrophy for  n  =  [3.0, 3.0, 6.0, 1.0]
+     ~~~~~~~~~~~~ IG =  0.172180468885 ~~~~~~~~~~~
+Root =  Ball
+Run-ID3
+AT DEPTH :  0  and value =  p
+SubExample:  {'Color': ['g', 'y', 'r', 'r', 'r', 'g'], 'Type': ['n', 'n', 'n', 'w', 'f', 'p'], 'Berry': ['y', 'n', 'n', 'y', 'n', 'n'], 'Result': ['y', 'n', 'n', 'n', 'n', 'n']}
+Space Entrophy =  [1.0, 5.0, 6.0, 0.65002242164835411]
+     ~~~~~~~~~~~~ Feature =  Berry ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [1.0, 1.0, 2.0, 1.0]
+            Entrophy for  n  =  [0.0, 4.0, 4.0, 0]
+     ~~~~~~~~~~~~ IG =  0.316689088315 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  r  =  [0.0, 3.0, 3.0, 0]
+            Entrophy for  g  =  [1.0, 1.0, 2.0, 1.0]
+     ~~~~~~~~~~~~ IG =  0.316689088315 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  n  =  [1.0, 2.0, 3.0, 0.91829583405448956]
+            Entrophy for  w  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  f  =  [0.0, 1.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.190874504621 ~~~~~~~~~~~
+Berry
+Run-ID3
+AT DEPTH :  1  and value =  y
+SubExample:  {'Color': ['g', 'r'], 'Type': ['n', 'w'], 'Result': ['y', 'n']}
+Space Entrophy =  [1.0, 1.0, 2.0, 1.0]
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  r  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  g  =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  1.0 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  f  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  w  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  n  =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  1.0 ~~~~~~~~~~~
+Color
+Run-ID3
+AT DEPTH :  2  and value =  y
+SubExample:  {'Type': [], 'Result': []}
+AT DEPTH :  2  and value =  r
+SubExample:  {'Type': ['w'], 'Result': ['n']}
+Space Entrophy =  [0.0, 1.0, 1.0, 0]
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  n  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  w  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  f  =  [0.0, 0.0, 0.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+
+Run-ID3
+AT DEPTH :  2  and value =  g
+SubExample:  {'Type': ['n'], 'Result': ['y']}
+Space Entrophy =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  n  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  w  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  f  =  [0.0, 0.0, 0.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+
+Run-ID3
+AT DEPTH :  1  and value =  n
+SubExample:  {'Color': ['y', 'r', 'r', 'g'], 'Type': ['n', 'n', 'f', 'p'], 'Result': ['n', 'n', 'n', 'n']}
+Space Entrophy =  [0.0, 4.0, 4.0, 0]
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  r  =  [0.0, 2.0, 2.0, 0]
+            Entrophy for  g  =  [0.0, 1.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  f  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  w  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  n  =  [0.0, 2.0, 2.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+
+Run-ID3
+AT DEPTH :  0  and value =  u
+SubExample:  {'Color': ['y', 'r', 'y'], 'Type': ['n', 'w', 'f'], 'Berry': ['y', 'n', 'n'], 'Result': ['y', 'y', 'y']}
+Space Entrophy =  [3.0, 0.0, 3.0, 0]
+     ~~~~~~~~~~~~ Feature =  Berry ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  n  =  [2.0, 0.0, 2.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [2.0, 0.0, 2.0, 0]
+            Entrophy for  r  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  g  =  [0.0, 0.0, 0.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  n  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  w  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  f  =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+
+Run-ID3
+AT DEPTH :  0  and value =  g
+SubExample:  {'Color': ['y', 'r', 'g', 'y', 'y', 'r', 'y'], 'Type': ['n', 'n', 'w', 'w', 'f', 'f', 'p'], 'Berry': ['n', 'y', 'y', 'n', 'y', 'y', 'n'], 'Result': ['n', 'y', 'y', 'n', 'y', 'y', 'n']}
+Space Entrophy =  [4.0, 3.0, 7.0, 0.98522813603425152]
+     ~~~~~~~~~~~~ Feature =  Berry ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [4.0, 0.0, 4.0, 0]
+            Entrophy for  n  =  [0.0, 3.0, 3.0, 0]
+     ~~~~~~~~~~~~ IG =  0.985228136034 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [1.0, 3.0, 4.0, 0.81127812445913283]
+            Entrophy for  r  =  [2.0, 0.0, 2.0, 0]
+            Entrophy for  g  =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.521640636343 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  n  =  [1.0, 1.0, 2.0, 1.0]
+            Entrophy for  w  =  [1.0, 1.0, 2.0, 1.0]
+            Entrophy for  f  =  [2.0, 0.0, 2.0, 0]
+     ~~~~~~~~~~~~ IG =  0.413799564606 ~~~~~~~~~~~
+Berry
+Run-ID3
+AT DEPTH :  1  and value =  y
+SubExample:  {'Color': ['r', 'g', 'y', 'r'], 'Type': ['n', 'w', 'f', 'f'], 'Result': ['y', 'y', 'y', 'y']}
+Space Entrophy =  [4.0, 0.0, 4.0, 0]
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  r  =  [2.0, 0.0, 2.0, 0]
+            Entrophy for  g  =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  f  =  [2.0, 0.0, 2.0, 0]
+            Entrophy for  w  =  [1.0, 0.0, 1.0, 0]
+            Entrophy for  n  =  [1.0, 0.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+
+Run-ID3
+AT DEPTH :  1  and value =  n
+SubExample:  {'Color': ['y', 'y', 'y'], 'Type': ['n', 'w', 'p'], 'Result': ['n', 'n', 'n']}
+Space Entrophy =  [0.0, 3.0, 3.0, 0]
+     ~~~~~~~~~~~~ Feature =  Color ~~~~~~~~~~~~~~
+            Entrophy for  y  =  [0.0, 3.0, 3.0, 0]
+            Entrophy for  r  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  g  =  [0.0, 0.0, 0.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+     ~~~~~~~~~~~~ Feature =  Type ~~~~~~~~~~~~~~
+            Entrophy for  p  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  f  =  [0.0, 0.0, 0.0, 0]
+            Entrophy for  w  =  [0.0, 1.0, 1.0, 0]
+            Entrophy for  n  =  [0.0, 1.0, 1.0, 0]
+     ~~~~~~~~~~~~ IG =  0.0 ~~~~~~~~~~~
+
+Run-ID3
+None

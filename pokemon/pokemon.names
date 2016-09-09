@@ -1,0 +1,5 @@
+classes:        yes=y, no=n
+Berry:          yes=y, no=n
+Ball:           Poke=p, Great=g, Ultra=u
+Color:          Yellow=y, Red=r, Green=g
+Type:           Normal=n, Water=w, Flying=f, Psychic=p
