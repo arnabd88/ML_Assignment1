@@ -75,6 +75,7 @@ import numpy
 fold_index = -1
 test_index = -1
 attr_index = -1
+verbose=-1
 if ('-Attr' in sys.argv):
 	attr_index = sys.argv.index('-Attr')
 else:
@@ -84,20 +85,24 @@ if ('-fold' in sys.argv):
 	fold_index = sys.argv.index('-fold')
 if ('-test' in sys.argv):
 	test_index = sys.argv.index('-test')
+if ('-verbose' in sys.argv):
+	verbose = 1
 
 ##-- Get the inorder attribute List --##
 fattr = open(sys.argv[attr_index+1], 'r+')
 
 GlobalAttrDict = func.parseAttr(fattr)
-for i,v in GlobalAttrDict.iteritems():
-	print i, v
+if(verbose==1):
+	print "<=========== Printing the Global Attributes data structure ==============>"
+	for i,v in GlobalAttrDict.iteritems():
+		print i, v
+print "<========================================================================>"
 
 ##--- Create the Example DataStructure ---##
 trainFileHandle = []
 GlobalExample = [] ## have type of dict([])
 if(fold_index != -1):
 	for f in range(1,int(sys.argv[fold_index + 1 ])+1):
-		print sys.argv[fold_index+1 + f]
 		fopen = open(sys.argv[fold_index+1 + f], 'r+')
 		exList = []
 		for i in fopen:
@@ -121,7 +126,18 @@ for i in range(0,len(GlobalExample)):
 	gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0)
 	##---------- Create the graph -----------------##
 	successFlag = gRoot.ID3()
-	print successFlag
+	##--------- Create Test Vectors -----------##
+	testV = dict([])
+	for x in range(0,len(ExampleDict[ExampleDict.keys()[0]])):
+		for w in range(0,len(ExampleDict.keys())):
+			if( ExampleDict.keys()[w] != 'Result'):
+				testV[ExampleDict.keys()[w]] = ExampleDict[ExampleDict.keys()[w]][x]
+
+		pres = gRoot.predictResult(testV)
+		if(pres != ExampleDict['Result'][x]):
+			print " Test Vector:", x , "-> BAD"
+		else:
+			print " Test Vector:", x , "-> GOOD"
 
 
 

@@ -97,7 +97,7 @@ def getIG(Example, Attr, feat, Entrophy_S):
 			if( v == sampleExList[i]):
 				localExampleDict['Result'].append(Example['Result'][i])
 		tempEntrophyRet = Entrophy(localExampleDict, Attr);
-		print "            Entrophy for ",v ," = ", tempEntrophyRet
+		#print "            Entrophy for ",v ," = ", tempEntrophyRet
 		AvgEnt = AvgEnt + (tempEntrophyRet[2]/len(sampleExList)) * tempEntrophyRet[3] 
 	return (Entrophy_S - AvgEnt)
 		
@@ -110,11 +110,11 @@ def decideRoot(ExampleDict, AttrDict):
 	BestFeature = ''
 	BestFeatureValue = 0
 	E_S = Entrophy(ExampleDict, AttrDict)
-	print "Space Entrophy = ", E_S
+	#print "Space Entrophy = ", E_S
 	for feat in Features:
-			print "     ~~~~~~~~~~~~ Feature = ", feat , "~~~~~~~~~~~~~~"
+		#	print "     ~~~~~~~~~~~~ Feature = ", feat , "~~~~~~~~~~~~~~"
 			IGv = getIG(ExampleDict, AttrDict, feat, E_S[3]);
-			print "     ~~~~~~~~~~~~ IG = ", IGv, "~~~~~~~~~~~"
+		#	print "     ~~~~~~~~~~~~ IG = ", IGv, "~~~~~~~~~~~"
 			if(IGv > BestFeatureValue):
 				BestFeatureValue = IGv ;
 				BestFeature = feat ;

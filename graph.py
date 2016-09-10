@@ -15,9 +15,10 @@ class graph:
 		self.examples = copy.deepcopy(Examples)
 		self.attr = Attr
 		self.depth = copy.deepcopy(CurrentDepth)
-		self.decision = []
+		self.decision = dict([])
 		if(Type == 'leaf'):
-			self.decision=[self.name]
+			self.decision[self.name] = []
+
 
 
 
@@ -59,13 +60,16 @@ class graph:
 
 
 	def ID3(self):
-		print "Run-ID3"
+		#print "Run-ID3"
 		res = self.attr['classes'].keys()
+		##nd = dict([])
 		if (not( res[0] in self.examples['Result'] and res[1] in self.examples['Result'])):
 			if(res[0] in self.examples['Result']):
-				self.decision.append(res[0])
+				self.decision[res[0]] = []
 			else:
-				self.decision.append(res[1])
+				self.decision[res[1]] = []
+			#self.decision.append(nd)
+			self.Type = 'leaf'
 			return 1
 		else:
 			##----- Loope over all the features and create a decision node -----
@@ -73,27 +77,32 @@ class graph:
 			subAttr     = self.ExtractAttrSubset(self.attr)
 			for v in self.Values:
 				subExample = self.ExtractExSubset(self.examples, v)
-				print "AT DEPTH : ", self.depth," and value = ", v
-				print "SubExample: ", subExample
+				#print "AT DEPTH : ", self.depth," and value = ", v
+				#print "SubExample: ", subExample
 				if(len(subExample['Result']) == 0): # no input available
 					MaxLabel = self.getCommonLabel(self.examples)
 					gnext = graph(MaxLabel, 'leaf', subExample, subAttr, self.depth+1)
-					self.decision.append(gnext)
+					self.decision[v] = [MaxLabel,gnext]
+					#self.decision.append(nd)
 				else:
 					nextNode   = func.decideRoot(subExample, subAttr)
-					print nextNode
+					#print nextNode
 					gnext      = graph(nextNode, 'internal', subExample, subAttr, self.depth+1)
-					self.decision.append(gnext)
+					self.decision[v] = [nextNode,gnext]
+					#self.decision.append()
 					succ       = gnext.ID3()
+			#self.decision.append(nd)
 		return 1
 			
 		
 
 
-	def getIG(self):
-		print "Deriving Information Gain)"
-
-
-	def getEntrophy(self, ValueSet, Attr):
-		print "Deriving Entrophy"
-
+	def predictResult(self, testV):
+		#print testV
+		#print self.name
+		#print self.decision
+		#print self.name
+		if( self.Type=='leaf' and len(self.decision.keys())==1 ):
+			return self.decision.keys()[0]
+		else :		
+			return self.decision[testV[self.name]][1].predictResult(testV)
