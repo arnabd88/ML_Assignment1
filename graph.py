@@ -70,6 +70,7 @@ class graph:
 				self.decision[res[1]] = []
 			#self.decision.append(nd)
 			self.Type = 'leaf'
+			print "Early return"
 			return 1
 		else:
 			##----- Loope over all the features and create a decision node -----
@@ -82,12 +83,14 @@ class graph:
 				if(len(subExample['Result']) == 0): # no input available
 					MaxLabel = self.getCommonLabel(self.examples)
 					gnext = graph(MaxLabel, 'leaf', subExample, subAttr, self.depth+1)
+					print "My-Depth = ",self.depth ,"  |  Child-Depth = ", self.depth+1, "  MaxLabel = ", MaxLabel
 					self.decision[v] = [MaxLabel,gnext]
 					#self.decision.append(nd)
 				else:
 					nextNode   = func.decideRoot(subExample, subAttr)
 					#print nextNode
 					gnext      = graph(nextNode, 'internal', subExample, subAttr, self.depth+1)
+					print "My-Depth = ",self.depth ,"  |  Child-Depth = ", self.depth+1, "  nextNode = ", nextNode, "V =", v
 					self.decision[v] = [nextNode,gnext]
 					#self.decision.append()
 					succ       = gnext.ID3()

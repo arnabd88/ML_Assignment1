@@ -115,7 +115,7 @@ def decideRoot(ExampleDict, AttrDict):
 		#	print "     ~~~~~~~~~~~~ Feature = ", feat , "~~~~~~~~~~~~~~"
 			IGv = getIG(ExampleDict, AttrDict, feat, E_S[3]);
 		#	print "     ~~~~~~~~~~~~ IG = ", IGv, "~~~~~~~~~~~"
-			if(IGv > BestFeatureValue):
+			if(IGv >= BestFeatureValue):
 				BestFeatureValue = IGv ;
 				BestFeature = feat ;
 	return BestFeature

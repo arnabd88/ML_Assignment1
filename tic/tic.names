@@ -1,0 +1,10 @@
+classes:       positive=positive, negative=negative
+BOX1:          X=x, O=o, Blank=b
+BOX2:          X=x, O=o, Blank=b
+BOX3:          X=x, O=o, Blank=b
+BOX4:          X=x, O=o, Blank=b
+BOX5:          X=x, O=o, Blank=b
+BOX6:          X=x, O=o, Blank=b
+BOX7:          X=x, O=o, Blank=b
+BOX8:          X=x, O=o, Blank=b
+BOX9:          X=x, O=o, Blank=b
