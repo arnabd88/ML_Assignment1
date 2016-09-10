@@ -106,3 +106,14 @@ class graph:
 			return self.decision.keys()[0]
 		else :		
 			return self.decision[testV[self.name]][1].predictResult(testV)
+
+	def getMaxDepth(self):
+		depth = 0
+		if( self.Type=='leaf'):
+			return self.depth
+		else:
+			for kc, child in self.decision.iteritems():
+				d = child[1].getMaxDepth()
+				if(d > depth):
+					depth = d
+		return depth

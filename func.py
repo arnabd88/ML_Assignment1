@@ -122,4 +122,19 @@ def decideRoot(ExampleDict, AttrDict):
 
 
 
+def Validate(dt,  vectDict, Result):
+	testV = dict([])
+	CollectResult = []
+	for x in range(0,len(vectDict[vectDict.keys()[0]])):
+		for w in range(0,len(vectDict.keys())):
+			if(vectDict.keys()[w] != 'Result'):
+				testV[vectDict.keys()[w]] = vectDict[vectDict.keys()[w]][x]
 
+		pres = dt.predictResult(testV)
+		if(pres != Result[x]):
+			CollectResult.append(testV)
+	if(len(CollectResult) == 0):
+		print "Validation Successful: Accurate Prediction"
+	else:
+		print "Inaccuracy in Prediction"
+	return CollectResult

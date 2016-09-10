@@ -98,7 +98,7 @@ if(verbose==1):
 		print i, v
 print "<========================================================================>"
 
-##--- Create the Example DataStructure ---##
+##--------------------- Create the Example DataStructure -----------------##
 trainFileHandle = []
 GlobalExample = [] ## have type of dict([])
 if(fold_index != -1):
@@ -110,7 +110,26 @@ if(fold_index != -1):
 			exList.append(dataList)
 		GlobalExample.append(exList)
 
-##g = graph.graph("Root-Node", 'Root', GlobalExample, 0)
+
+
+##------------------- Create the Test Datastructure ---------------------##
+TestDict = dict([])
+TestDict['Result'] = []
+if(test_index != -1):
+	ftest = open(sys.argv[test_index + 1], 'r+')
+	exList = []
+	for i in ftest:
+		dataList = i.split('\n')[0].split(',')
+		exList.append(dataList)
+
+	TestFeatureOrder = GlobalAttrDict['_AttrOrder_']
+	for k in range(0,len(TestFeatureOrder)):
+		tl = [row[k] for row in exList]
+		TestDict[TestFeatureOrder[k]] = tl
+		TestDict['Result'] = [row[len(TestFeatureOrder)] for row in exList]
+
+
+##------------------ Train and test on the Training Data ---------------##
 for i in range(0,len(GlobalExample)):
 	##---- Make the example as a dictionary of attr -> values
 	Example = GlobalExample[i]
@@ -126,18 +145,20 @@ for i in range(0,len(GlobalExample)):
 	gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0)
 	##---------- Create the graph -----------------##
 	successFlag = gRoot.ID3()
-	##--------- Create Test Vectors -----------##
-	testV = dict([])
-	for x in range(0,len(ExampleDict[ExampleDict.keys()[0]])):
-		for w in range(0,len(ExampleDict.keys())):
-			if( ExampleDict.keys()[w] != 'Result'):
-				testV[ExampleDict.keys()[w]] = ExampleDict[ExampleDict.keys()[w]][x]
+	##------- Finished cross-checking Training Data ------------##
+	depth = gRoot.getMaxDepth()
+	print "##------- Reporting Tree Depth ----------------------------##"
+	print "Depth = ", depth ,"\n\n"
+	print"##--------- CrossCheck the Training Data : Create Test Vectors -----------##"
+	y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
+	if(test_index != -1):
+		print "##-------- Validating prediction for Test Data -----------##"
+		y = func.Validate( gRoot, TestDict, TestDict['Result'] )
+		print len(y)
+		print len(ExampleDict[ExampleDict.keys()[0]])
+	
 
-		pres = gRoot.predictResult(testV)
-		if(pres != ExampleDict['Result'][x]):
-			print " Test Vector:", x , "-> BAD"
-		else:
-			print " Test Vector:", x , "-> GOOD"
+
 
 
 
