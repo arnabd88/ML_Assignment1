@@ -125,7 +125,7 @@ if(fold_index != -1):
 
 LimitDepth = -1 # -1 corresponds to unbounded
 
-if('-setfold' in sys.argv and '-depthOn' not in sys.argv):
+if('-setfold' in sys.argv and '-depthOn' not in sys.argv and '-mf' not in sys.argv):
 	## -- Just single training and test data for basic training -- ##
 	if(len(trainFilehandle)==0):
 		print "1.Training and test files not provided..... Exiting!!"
@@ -148,7 +148,7 @@ if('-setfold' in sys.argv and '-depthOn' not in sys.argv):
 
 
 ##--- For k fold validation
-elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1):
+elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-mf' not in sys.argv):
 	print "Here"
 	MaxAccuracy = 0.0
 	AccuracyList = []
@@ -184,10 +184,7 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1):
 				hyperDepth = fixDepth
 				
 			AccuracyList.append(locAcc)
-		print AccuracyList
-		print MaxAccuracy
-		print hyperDepth
-
+		print AccuracyList, MaxAccuracy, hyperDepth
 		##---------- Now train on the selected hyper-parameter ---------------##
 		ExampleDict = CreateExampleStruct(trainFilehandle)
 		if(test_index != -1):
@@ -203,6 +200,71 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1):
 			TestAccuracy = ((float(len(ExampleDict['Result']) - len(y)))/len(ExampleDict['Result']))*100
 			print "Final Test Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TestAccuracy,"%"
 			
+
+##--- Setting C + K-fold
+elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-mf' in sys.argv):
+	##--- Train with method-1
+	HyperMethod = dict([])
+	if(len(trainFilehandle)==0):
+		print "Training and test files not provided... Exiting!!"
+	else:
+		##method-1: Majority feature value--
+		ExampleDict = CreateExampleStruct(trainFilehandle)
+		localAttrStruct = copy.deepcopy(GlobalAttrDict)
+		FeatureAttr = dict([])
+		for atr in localAttrStruct['_AttrOrder_']:
+			if('?' in ExampleDict[atr]):  ##missing Feature value
+				##-- Find the majority feature value for this attribute
+				valA = localAttrStruct[atr].keys()
+				MaxCount = 0;
+				BestFeature = ''
+				for v in valA:
+					count = 0
+					for k in ExampleDict[atr]:
+						if(v==k):
+							count = count + 1.0
+					if(count > MaxCount):
+						MaxCount = count
+						BestFeature = v
+				FeatureAttr[atr] = v
+	
+		avgAccMethod1 = 0	
+		for it in range(0,foldValue):
+			TrainingFileList = []
+			ExampleDict = dict([])
+			TestDict    = dict([])
+			for el in range(0,foldValue):
+				if(el != it):
+					TrainingFileList.append(trainFilehandle[el])
+			ExampleDict = CreateExampleStruct(TrainingFileList)
+			TestDict = CreateExampleStruct([trainFilehandle[it]])
+			##---- Set the missing feature value derived earlier ----##
+			for atr in FeatureAttr.keys():
+				for items in range(0,len(ExampleDict[atr])):
+					if( ExampleDict[atr][items] == '?'):
+						ExampleDict[atr][items] = FeatureAttr[atr]
+				for items in range(0,len(TestDict[atr])):
+					if( TestDict[atr][items] == '?'):
+						TestDict[atr][items] = FeatureAttr[atr]
+			Root = func.decideRoot(ExampleDict, GlobalAttrDict)
+			gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, -1)
+			sFlag = gRoot.ID3()
+			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
+			y = func.Validate( gRoot, TestDict, TestDict['Result'])
+			print len(y), len(ExampleDict['Result'])
+			avgAccMethod1 = avgAccMethod1 + (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100
+		HyperMethod['Method1'] = avgAccMethod1/foldValue
+ ##----------------------------------------------------------------------------------------------------------------------##
+	##--- Train with method-2
+	
+		
+
+
+
+
+
+				
+
 
 else:
 	print "HelloHere"
