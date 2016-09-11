@@ -256,6 +256,35 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 		HyperMethod['Method1'] = avgAccMethod1/foldValue
  ##----------------------------------------------------------------------------------------------------------------------##
 	##--- Train with method-2
+	ExampleDict = CreateExampleStruct(trainFilehandle)
+	localAttrStruct = copy.deepcopy(GlobalAttrDict)
+	trackPartition = []
+	for atr in localAttrStruct['_AttrOrder_']:
+		if('?' in ExampleDict[atr]):  ##missing feature value
+			for el in range(0,len(ExampleDict[atr])):
+				if( ExampleDict[atr][el] == '?' ):
+					clabel = ExampleDict['Result'][el]
+					MaxCount = 0
+					BestFeature = ''
+					for v in localAttrStruct[atr].keys():
+						count = 0
+						for j in range(0,len(ExampleDict[atr])):
+							if(ExampleDict[atr][j] != '?' and ExampleDict['Result'][j]==clabel):
+								count = count + 1.0
+						if(count > MaxCount):
+							MaxCount = count
+							BestFeature = v
+					ExampleDict[atr][el] = BestFeature
+	CorrectedExample = copy.deepcopy(ExampleDict)
+	##----- Manage the partitions -------##
+	for eachList in trainFilehandle:
+		trackPartition.append(len(eachList))
+	if(len(trackPartition) != foldValue):
+		print "Partition List does not corresponds with foldValue ...FATAL.. Exiting!!"
+##	for it in range(0,foldValue):
+##		##---- Create the Example and Test set
+##		for
+							
 	
 		
 
