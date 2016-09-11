@@ -9,4 +9,4 @@ python Assignment1.py -setfold -Attr mush.names -fold 1 datasets/SettingB/traini
 
 python Assignment1.py -fold 6 datasets/SettingB/CVSplits/training_00.data datasets/SettingB/CVSplits/training_01.data datasets/SettingB/CVSplits/training_02.data datasets/SettingB/CVSplits/training_03.data datasets/SettingB/CVSplits/training_04.data datasets/SettingB/CVSplits/training_05.data -depthOn -Attr mush.names -setfold -test datasets/SettingB/test.data > Q3_SetB_2
 
-
+python Assignment1.py -fold 6 datasets/SettingC/CVSplits/training_00.data datasets/SettingC/CVSplits/training_01.data datasets/SettingC/CVSplits/training_02.data datasets/SettingC/CVSplits/training_03.data datasets/SettingC/CVSplits/training_04.data datasets/SettingC/CVSplits/training_05.data -depthOn -Attr mush.names -setfold -mf -test datasets/SettingC/test.data > Q3_SetC
