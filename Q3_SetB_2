@@ -1,0 +1,249 @@
+<========================================================================>
+Here
+Root:  odor
+Depth =  1
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  1
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  1
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 44
+Root:  odor
+Depth =  1
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 197
+Root:  odor
+Depth =  1
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 505
+Root:  odor
+Depth =  1
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 541
+Root:  odor
+Depth =  2
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 36
+Root:  odor
+Depth =  2
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 35
+Root:  odor
+Depth =  2
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 30
+Root:  odor
+Depth =  2
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 30
+Root:  odor
+Depth =  2
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 38
+Root:  odor
+Depth =  2
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 200
+Root:  odor
+Depth =  3
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 45
+Root:  odor
+Depth =  3
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 38
+Root:  odor
+Depth =  3
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 27
+Root:  odor
+Depth =  3
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  3
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 39
+Root:  odor
+Depth =  3
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 108
+Root:  odor
+Depth =  4
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 58
+Root:  odor
+Depth =  4
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 38
+Root:  odor
+Depth =  4
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  4
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 35
+Root:  odor
+Depth =  4
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 41
+Root:  odor
+Depth =  4
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 91
+Root:  odor
+Depth =  5
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 58
+Root:  odor
+Depth =  5
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 45
+Root:  odor
+Depth =  5
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  5
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 37
+Root:  odor
+Depth =  5
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 42
+Root:  odor
+Depth =  5
+Inaccuracy in Prediction
+Inaccuracy in Prediction
+Y: 89
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 58
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 49
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 39
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 46
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 91
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 58
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 49
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 39
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 46
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 91
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 58
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 49
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 32
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 39
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 46
+Root:  odor
+Depth =  9
+Validation Successful: Accurate Prediction
+Inaccuracy in Prediction
+Y: 91
+[92.93040293040292, 98.0690737833595, 98.48770277341707, 98.45630559916275, 98.41444270015698, 98.35164835164835, 98.35164835164835, 98.35164835164835]
+98.4877027734
+3
+Inaccuracy in Prediction
+Final Training Accuracy with hyper-parameter Depth =  3 is  95.9968602826 %
+Inaccuracy in Prediction
+Final Test Accuracy with hyper-parameter Depth =  3 is  96.9649398221 %

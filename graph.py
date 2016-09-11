@@ -9,13 +9,14 @@ import numpy
 
 class graph:
 
-	def __init__ (self, Name, Type, Examples, Attr, CurrentDepth):
+	def __init__ (self, Name, Type, Examples, Attr, CurrentDepth, limitDepth):
 		self.name = Name
 		self.Type = copy.deepcopy(Type)
 		self.examples = copy.deepcopy(Examples)
 		self.attr = Attr
 		self.depth = copy.deepcopy(CurrentDepth)
 		self.decision = dict([])
+		self.limitDepth = limitDepth
 		if(Type == 'leaf'):
 			self.decision[self.name] = []
 
@@ -70,7 +71,7 @@ class graph:
 				self.decision[res[1]] = []
 			#self.decision.append(nd)
 			self.Type = 'leaf'
-			print "Early return"
+			#print "Early return"
 			return 1
 		else:
 			##----- Loope over all the features and create a decision node -----
@@ -78,22 +79,25 @@ class graph:
 			subAttr     = self.ExtractAttrSubset(self.attr)
 			for v in self.Values:
 				subExample = self.ExtractExSubset(self.examples, v)
-				#print "AT DEPTH : ", self.depth," and value = ", v
-				#print "SubExample: ", subExample
 				if(len(subExample['Result']) == 0): # no input available
 					MaxLabel = self.getCommonLabel(self.examples)
-					gnext = graph(MaxLabel, 'leaf', subExample, subAttr, self.depth+1)
-					print "My-Depth = ",self.depth ,"  |  Child-Depth = ", self.depth+1, "  MaxLabel = ", MaxLabel
+					gnext = graph(MaxLabel, 'leaf', subExample, subAttr, self.depth+1, self.limitDepth)
+					#print "My-Depth = ",self.depth ,"  |  Child-Depth = ", self.depth+1, "  MaxLabel = ", MaxLabel
 					self.decision[v] = [MaxLabel,gnext]
 					#self.decision.append(nd)
 				else:
 					nextNode   = func.decideRoot(subExample, subAttr)
 					#print nextNode
-					gnext      = graph(nextNode, 'internal', subExample, subAttr, self.depth+1)
-					print "My-Depth = ",self.depth ,"  |  Child-Depth = ", self.depth+1, "  nextNode = ", nextNode, "V =", v
-					self.decision[v] = [nextNode,gnext]
-					#self.decision.append()
-					succ       = gnext.ID3()
+					if(self.depth+1 == self.limitDepth):
+						MaxLabel = self.getCommonLabel(subExample)
+						gnext    = graph(MaxLabel, 'leaf', subExample, subAttr, self.depth+1, self.limitDepth)
+						self.decision[v] = [MaxLabel, gnext]
+					else:
+						gnext      = graph(nextNode, 'internal', subExample, subAttr, self.depth+1, self.limitDepth)
+						#print "My-Depth = ",self.depth ,"  |  Child-Depth = ", self.depth+1, "  nextNode = ", nextNode, "V =", v
+						self.decision[v] = [nextNode,gnext]
+						#self.decision.append()
+						succ       = gnext.ID3()
 			#self.decision.append(nd)
 		return 1
 			

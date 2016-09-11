@@ -123,7 +123,9 @@ if(fold_index != -1):
 ##------------------ Train and test on the Training Data ---------------##
 
 
-if('-setA' in sys.argv and '-depthOn' not in sys.argv):
+LimitDepth = -1 # -1 corresponds to unbounded
+
+if('-setfold' in sys.argv and '-depthOn' not in sys.argv):
 	## -- Just single training and test data for basic training -- ##
 	if(len(trainFilehandle)==0):
 		print "1.Training and test files not provided..... Exiting!!"
@@ -133,44 +135,75 @@ if('-setA' in sys.argv and '-depthOn' not in sys.argv):
 		if(test_index !=-1):
 			TestDict = CreateTestStruct(open(sys.argv[test_index +1], 'r+'))
 		Root = func.decideRoot(ExampleDict, GlobalAttrDict)
-		gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0)
+		gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, LimitDepth)
 		sFlag = gRoot.ID3()
 		depth = gRoot.getMaxDepth()
 		print "Depth = ", depth
 		y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
 		if(test_index!=-1):
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print y
+			print len(y)
+
+
 
 
 ##--- For k fold validation
-elif('-setA' in sys.argv and '-depthOn' in sys.argv and foldValue > 1):
+elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1):
 	print "Here"
+	MaxAccuracy = 0.0
+	AccuracyList = []
+	hyperDepth = 0
 	if(len(trainFilehandle) == 0):
 		print "Training and test files not provided.... Exiting!!"
 	else:
-	#	for fixDepth in depthParam: ## this loop is for all the depths
-		for it in range(0,foldValue):
-			TrainingFileList = []
-			ExampleDict = dict([])
-			TestDict = dict([])
-			#TestDict    = CreateTestStruct(trainFilehandle[it])
-			TestDict    = CreateExampleStruct([trainFilehandle[it]])
-			for el in range(0,foldValue):
-				#if(el !=it):
-				TrainingFileList.append(trainFilehandle[el])
-			ExampleDict = CreateExampleStruct(TrainingFileList)
-			Root = func.decideRoot(ExampleDict, GlobalAttrDict)
-			print "Root: ", Root
-			gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0)
-			sFlag = gRoot.ID3()
-			depth = gRoot.getMaxDepth()
-			print "Depth = ", depth
-			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
-			print y
-			y = func.Validate(gRoot, TestDict, TestDict['Result'])
-			print y, len(y)
-			print GlobalAttrDict['_AttrOrder_']
+		for fixDepth in depthParam: ## this loop is for all the depths
+			avgAccinDepth = 0
+			for it in range(0,foldValue):
+				TrainingFileList = []
+				ExampleDict = dict([])
+				TestDict = dict([])
+				#TestDict    = CreateTestStruct(trainFilehandle[it])
+				TestDict    = CreateExampleStruct([trainFilehandle[it]])
+				for el in range(0,foldValue):
+					if(el !=it):
+						TrainingFileList.append(trainFilehandle[el])
+				ExampleDict = CreateExampleStruct(TrainingFileList)
+				Root = func.decideRoot(ExampleDict, GlobalAttrDict)
+				print "Root: ", Root
+				gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, fixDepth)
+				sFlag = gRoot.ID3()
+				depth = gRoot.getMaxDepth()
+				print "Depth = ", depth
+				y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
+				y = func.Validate(gRoot, TestDict, TestDict['Result'])
+				print "Y:" ,len(y)
+				avgAccinDepth = avgAccinDepth + (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100
+			locAcc = avgAccinDepth/foldValue		
+			if(locAcc > MaxAccuracy) :
+				MaxAccuracy = float(locAcc)
+				hyperDepth = fixDepth
+				
+			AccuracyList.append(locAcc)
+		print AccuracyList
+		print MaxAccuracy
+		print hyperDepth
+
+		##---------- Now train on the selected hyper-parameter ---------------##
+		ExampleDict = CreateExampleStruct(trainFilehandle)
+		if(test_index != -1):
+			TestDict = CreateTestStruct(open(sys.argv[test_index +1], 'r+'))
+		Root = func.decideRoot(ExampleDict, GlobalAttrDict)
+		gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, hyperDepth)
+		sFlag = gRoot.ID3()
+		y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
+		TrainingAccuracy = ((float(len(ExampleDict['Result']) - len(y)))/len(ExampleDict['Result']))*100
+		print "Final Training Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TrainingAccuracy,"%"
+		if(test_index != -1):
+			y = func.Validate( gRoot, TestDict, TestDict['Result'])
+			TestAccuracy = ((float(len(ExampleDict['Result']) - len(y)))/len(ExampleDict['Result']))*100
+			print "Final Test Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TestAccuracy,"%"
+			
+
 else:
 	print "HelloHere"
 	print foldValue
