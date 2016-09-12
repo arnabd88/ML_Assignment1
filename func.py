@@ -133,8 +133,8 @@ def Validate(dt,  vectDict, Result):
 		pres = dt.predictResult(testV)
 		if(pres != Result[x]):
 			CollectResult.append(testV)
-	if(len(CollectResult) == 0):
-		print "Validation Successful: Accurate Prediction"
-	else:
-		print "Inaccuracy in Prediction"
+#	if(len(CollectResult) == 0):
+#		print "Validation Successful: Accurate Prediction"
+#	else:
+#		print "Inaccuracy in Prediction"
 	return CollectResult

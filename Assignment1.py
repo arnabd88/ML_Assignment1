@@ -123,6 +123,26 @@ if(fold_index != -1):
 ##------------------ Train and test on the Training Data ---------------##
 
 
+
+def getSdMean( acclist  ):
+	if(len(acclist)==0):
+		return []
+	else:
+		resultList = []
+		partSum = 0
+		for i in acclist:
+			partSum = partSum + i
+		mean = float(partSum)/len(acclist)
+		resultList.append(mean)
+		##-- Find the SD --
+		sumSD = 0
+		for i in acclist:
+			sumSD = sumSD + (i-mean)**2
+		SD = math.sqrt(float(sumSD)/len(acclist))
+		resultList.append(SD)
+	return resultList
+
+
 LimitDepth = -1 # -1 corresponds to unbounded
 
 if('-setfold' in sys.argv and '-depthOn' not in sys.argv and '-mf' not in sys.argv):
@@ -131,18 +151,21 @@ if('-setfold' in sys.argv and '-depthOn' not in sys.argv and '-mf' not in sys.ar
 		print "1.Training and test files not provided..... Exiting!!"
 	else:
 		ExampleDict = CreateExampleStruct(trainFilehandle[0:1])
-		print ExampleDict
+		#print ExampleDict
 		if(test_index !=-1):
 			TestDict = CreateTestStruct(open(sys.argv[test_index +1], 'r+'))
 		Root = func.decideRoot(ExampleDict, GlobalAttrDict)
 		gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, LimitDepth)
 		sFlag = gRoot.ID3()
 		depth = gRoot.getMaxDepth()
-		print "Depth = ", depth
+		print "MaxDepth of the Tree= ", depth
 		y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
+		print "Training Accuracy = ", float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']),"%"
 		if(test_index!=-1):
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print len(y)
+			print "Test Accuracy = ", float(len(TestDict['Result']) - len(y))/len(TestDict['Result']),"%"
+			#print len(y)
+		print "\n\n"
 
 
 
@@ -151,13 +174,16 @@ if('-setfold' in sys.argv and '-depthOn' not in sys.argv and '-mf' not in sys.ar
 elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-mf' not in sys.argv):
 	print "Here"
 	MaxAccuracy = 0.0
-	AccuracyList = []
+	#AccuracyList = []
 	hyperDepth = 0
 	if(len(trainFilehandle) == 0):
 		print "Training and test files not provided.... Exiting!!"
 	else:
+		SD_Mean_Tracker = []     ##--- Tracks the mean and accuracy for each depth
+		print "*** Starting K-fold cross Validation with depth as Hyper ***\n"
 		for fixDepth in depthParam: ## this loop is for all the depths
 			avgAccinDepth = 0
+			AccuracyTracker = [] ##--- Collect the accuracy at each fold per depth
 			for it in range(0,foldValue):
 				TrainingFileList = []
 				ExampleDict = dict([])
@@ -169,23 +195,32 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 						TrainingFileList.append(trainFilehandle[el])
 				ExampleDict = CreateExampleStruct(TrainingFileList)
 				Root = func.decideRoot(ExampleDict, GlobalAttrDict)
-				print "Root: ", Root
+				print "Current iteration Root: ", Root
+				print "Fixed Depth Limit: ", fixDepth
 				gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, fixDepth)
 				sFlag = gRoot.ID3()
 				depth = gRoot.getMaxDepth()
-				print "Depth = ", depth
+				print "Tree Depth = ", depth ,"\n"
 				y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
 				y = func.Validate(gRoot, TestDict, TestDict['Result'])
-				print "Y:" ,len(y)
+				#print "Y:" ,len(y)
 				avgAccinDepth = avgAccinDepth + (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+				AccuracyTracker.append((float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100)
+			SD_Mean_Tracker.append(getSdMean(AccuracyTracker))
 			locAcc = avgAccinDepth/foldValue		
 			if(locAcc > MaxAccuracy) :
 				MaxAccuracy = float(locAcc)
 				hyperDepth = fixDepth
+		print "*** K-Fold cross Validation Ends ******************************\n"
+		print "--------------- K-Fold Experiment Result Detail ---------------------"
+		for d in range(0,len(depthParam)):
+			print "At Depth Limit:", depthParam[d], "    Average-Accuracy:", SD_Mean_Tracker[d][0],"%     Standard-Deviation:", SD_Mean_Tracker[d][1]
+		print "---------------------------------------------------------------------\n\n"
+		print "Selected-Hyper-Depth = ", hyperDepth, "\n"
 				
-			AccuracyList.append(locAcc)
-		print AccuracyList, MaxAccuracy, hyperDepth
-		##---------- Now train on the selected hyper-parameter ---------------##
+		#	AccuracyList.append(locAcc)
+		#print AccuracyList, MaxAccuracy, hyperDepth
+		print "##---------- Now train on the selected hyper-parameter ---------------##"
 		ExampleDict = CreateExampleStruct(trainFilehandle)
 		if(test_index != -1):
 			TestDict = CreateTestStruct(open(sys.argv[test_index +1], 'r+'))
@@ -194,22 +229,26 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 		sFlag = gRoot.ID3()
 		y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
 		TrainingAccuracy = ((float(len(ExampleDict['Result']) - len(y)))/len(ExampleDict['Result']))*100
-		print "Final Training Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TrainingAccuracy,"%"
+		print "Final Training Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TrainingAccuracy,"%\n\n"
 		if(test_index != -1):
+			print "------------ Testing with Test Data in current Setting -----------"
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
 			TestAccuracy = ((float(len(TestDict['Result']) - len(y)))/len(TestDict['Result']))*100
-			print "Final Test Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TestAccuracy,"%"
+			print "Final Test Accuracy with hyper-parameter Depth = ",hyperDepth, "is ", TestAccuracy,"%\n\n"
 			
 
 ##--- Setting C + K-fold
-elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-mf' in sys.argv):
+elif('-setfold' in sys.argv and foldValue > 1 and '-mf' in sys.argv):
 	##--- Train with method-1
 	HyperMethod = dict([])
 	if(len(trainFilehandle)==0):
 		print "Training and test files not provided... Exiting!!"
 	else:
+		Method_SD_Tracker = []  #--- MEthod-1, MEthod2, Method3 tracker for SD and Mean
 		##method-1: Majority feature value--
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 		print "~~~~~~~~~~~~~~~~ Starting Training Method-I ~~~~~~~~~~~~~~~~~~~~~~~~"
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 		ExampleDict = CreateExampleStruct(trainFilehandle)
 		localAttrStruct = copy.deepcopy(GlobalAttrDict)
 		FeatureAttr = dict([])
@@ -230,6 +269,8 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 				FeatureAttr[atr] = v
 	
 		avgAccMethod1 = 0	
+		AccucracyTracker = []
+		print "*** Starting K-fold cross validation for missing feature/Method-1 ***\n"
 		for it in range(0,foldValue):
 			TrainingFileList = []
 			ExampleDict = dict([])
@@ -252,42 +293,19 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			sFlag = gRoot.ID3()
 			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print len(y), len(TestDict['Result'])
+			#print len(y), len(TestDict['Result'])
 			avgAccMethod1 = avgAccMethod1 + (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+			AccucracyTracker.append((float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100)
 		HyperMethod['Method1'] = avgAccMethod1/foldValue
-		print "Method-I = ", HyperMethod['Method1']
- ##----------------------------------------------------------------------------------------------------------------------##
-##		##--- Train with method-3 -> Treat the missing feature as special feature: requires update to the attribute table
-##		print "~~~~~~~~~~~~~~~~ Starting Training Method-III ~~~~~~~~~~~~~~~~~~~~~~~"
-##		ExampleDict = CreateExampleStruct(trainFilehandle)
-##		localAttrStr = copy.deepcopy(GlobalAttrDict)
-##		for atr in localAttrStr['_AttrOrder_']:
-##			if( '?' in ExampleDict[atr]):  ## detecting the missing feature value
-##				if( '?' not in localAttrStr[atr].keys()):
-##					localAttrStr[atr]['?'] = 'Special'
-##		
-##		avgAccMethod3 = 0	
-##		for it in range(0,foldValue):
-##			TrainingFileList = []
-##			ExampleDict = dict([])
-##			TestDict    = dict([])
-##			for el in range(0,foldValue):
-##				TrainingFileList.append(trainFilehandle[el])
-##			ExampleDict = CreateExampleStruct(TrainingFileList)
-##			TestDict    = CreateExampleStruct([trainFilehandle[it]])
-##			Root = func.decideRoot(ExampleDict, localAttrStr)
-##			gRoot = graph.graph( Root, 'ROOT', ExampleDict, localAttrStr, 0, -1)
-##			sFlag = gRoot.ID3()
-##			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
-##			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-##			print len(y), len(TestDict['Result'])
-##			avgAccMethod3 = avgAccMethod3 + (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
-##		HyperMethod['Method3'] = avgAccMethod3/foldValue
-##		print "Method-III = ", HyperMethod['Method3']
+		Method_SD_Tracker.append(getSdMean(AccucracyTracker))
+		print "Method-I = ", HyperMethod['Method1'],"%\n"
+		print "*** Method-1 K-fold CV ends here ************************************\n"
 			
  ##----------------------------------------------------------------------------------------------------------------------##
 		##--- Train with method-2
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 		print "~~~~~~~~~~~~~~~~ Starting Training Method-II ~~~~~~~~~~~~~~~~~~~~~~~~"
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"
 		ExampleDict = CreateExampleStruct(trainFilehandle)
 		localAttrStruct = copy.deepcopy(GlobalAttrDict)
 		trackPartition = []
@@ -314,6 +332,8 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 		if(len(trackPartition) != foldValue):
 			print "Partition List does not corresponds with foldValue ...FATAL.. Exiting!!"
 		avgAccMethod2 = 0
+		AccucracyTracker = []
+		print "*** Starting K-fold cross validation for missing feature/Method-2 ***\n"
 		for it in range(0,foldValue):
 			##---- Create the Example and Test set
 			tempExDict = dict([])	
@@ -322,7 +342,7 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			avoidFrom = 0
 			avoidTill = 0
 			detectAvoid = 0
-			print trackPartition
+			#print trackPartition
 			for i in range(0,len(trackPartition)):
 				if(i!=it and detectAvoid==0):
 					avoidFrom = avoidFrom + trackPartition[i]
@@ -343,14 +363,19 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			sFlag = gRoot.ID3()
 			y = func.Validate( gRoot, tempExDict, tempExDict['Result'] )
 			y = func.Validate( gRoot, tempTestDict, tempTestDict['Result'] )
-			print len(y), len(tempTestDict['Result'])
+			#print len(y), len(tempTestDict['Result'])
 			avgAccMethod2 = avgAccMethod2 + (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+			AccucracyTracker.append((float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100)
+		Method_SD_Tracker.append(getSdMean(AccucracyTracker))
 		HyperMethod['Method2'] = avgAccMethod2/foldValue
-		print "Method-II = ", HyperMethod['Method2']
+		print "Method-II = ", HyperMethod['Method2'],"%\n"
+		print "*** Method-3 K-fold CV ends here ************************************\n"
 
  ##----------------------------------------------------------------------------------------------------------------------##
 		##--- Train with method-3 -> Treat the missing feature as special feature: requires update to the attribute table
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 		print "~~~~~~~~~~~~~~~~ Starting Training Method-III ~~~~~~~~~~~~~~~~~~~~~~~"
+		print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 		ExampleDict = CreateExampleStruct(trainFilehandle)
 		localAttrStr = copy.deepcopy(GlobalAttrDict)
 		for atr in localAttrStr['_AttrOrder_']:
@@ -359,6 +384,8 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 					localAttrStr[atr]['?'] = 'Special'
 		
 		avgAccMethod3 = 0	
+		AccucracyTracker = []
+		print "*** Starting K-fold cross validation for missing feature/Method-2 ***\n"
 		for it in range(0,foldValue):
 			TrainingFileList = []
 			ExampleDict = dict([])
@@ -372,10 +399,13 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			sFlag = gRoot.ID3()
 			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print len(y), len(TestDict['Result'])
+			#print len(y), len(TestDict['Result'])
 			avgAccMethod3 = avgAccMethod3 + (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+			AccucracyTracker.append((float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100)
+		Method_SD_Tracker.append(getSdMean(AccucracyTracker))
 		HyperMethod['Method3'] = avgAccMethod3/foldValue
-		print "Method-III = ", HyperMethod['Method3']
+		print "Method-III = ", HyperMethod['Method3'],"%\n"
+		print "*** Method-3 K-fold CV ends here ************************************\n"
 
 		WhoWon = ''
 		MaxVal = 0
@@ -384,10 +414,21 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 				WhoWon = i
 				MaxVal = HyperMethod[i]
 
+
+		print "--------------- Method-1/2/3 k-Fold Experiment Result Detail ---------------------"
+		for kd in HyperMethod.keys():
+			if( kd == 'Method1'):
+				print 'Method-1           Average-Accuracy:', Method_SD_Tracker[0][0], "%              Standard-Deviation:", Method_SD_Tracker[0][1]
+			elif( kd == 'Method2'):
+				print 'Method-2           Average-Accuracy:', Method_SD_Tracker[1][0], "%              Standard-Deviation:", Method_SD_Tracker[1][1]
+			elif( kd == 'Method3'): 
+				print 'Method-3           Average-Accuracy:', Method_SD_Tracker[2][0], "%              Standard-Deviation:", Method_SD_Tracker[2][1]
+		print "\n\n"
+
 		##-------------- Retraining ------------------##
 
 		if( WhoWon == 'Method1'):
-			print 'Method1 Won - Train Full data using Method1 and Test'
+			print 'Method1 Won - Train Full data using Method1 and Test .................\n'
 			ExampleDict = CreateExampleStruct(trainFilehandle)
 			if(test_index != -1):
 				TestDict = CreateTestStruct(open(sys.argv[test_index + 1], 'r+'))
@@ -431,10 +472,10 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, -1)
 			sFlag = gRoot.ID3()
 			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
-			print 'TrainingAccuracy in M1 = ', (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100
+			print 'TrainingAccuracy in Method1 = ', (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100, "%\n"
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print len(y), len(TestDict['Result'])
-			print 'TestAccuracy in M1 = ', (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+			#print len(y), len(TestDict['Result'])
+			print 'TestAccuracy in Method1 = ', (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100, "%\n"
 			
 		elif(WhoWon == 'Method2'):
 			print 'Method2 Won - Train Full data using Method2 and Test'
@@ -480,10 +521,10 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			gRoot = graph.graph(Root, 'ROOT', ExampleDict, localAttrStruct, 0, -1)
 			sFlag = gRoot.ID3()
 			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
-			print 'TrainingAccuracy in M2 = ', (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100
+			print 'TrainingAccuracy in Method2 = ', (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100, "%\n"
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print "OK: ", len(y), len(TestDict['Result'])
-			print 'TestAccuracy in M2 = ', (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+			#print "OK: ", len(y), len(TestDict['Result'])
+			print 'TestAccuracy in Method2 = ', (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100, "%\n"
 			
 
 			
@@ -501,10 +542,10 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 			sFlag = gRoot.ID3()
 			depth = gRoot.getMaxDepth()
 			y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
-			print 'TrainingAccuracy in M3 = ', (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100
+			print 'TrainingAccuracy in Method3 = ', (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100, "%\n"
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print "OK3: ", len(y), len(TestDict['Result'])
-			print 'TestAccuracy in M3 = ', (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100
+			#print "OK3: ", len(y), len(TestDict['Result'])
+			print 'TestAccuracy in Method3 = ', (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100, "%\n"
 			
 		else:
 			print 'Something is Wrong'
