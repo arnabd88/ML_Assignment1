@@ -158,12 +158,13 @@ if('-setfold' in sys.argv and '-depthOn' not in sys.argv and '-mf' not in sys.ar
 		gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, LimitDepth)
 		sFlag = gRoot.ID3()
 		depth = gRoot.getMaxDepth()
+		print "RootNode = ", Root
 		print "MaxDepth of the Tree= ", depth
 		y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
-		print "Training Accuracy = ", float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']),"%"
+		print "Training Accuracy = ", (float(len(ExampleDict['Result']) - len(y))/len(ExampleDict['Result']))*100,"%"
 		if(test_index!=-1):
 			y = func.Validate( gRoot, TestDict, TestDict['Result'])
-			print "Test Accuracy = ", float(len(TestDict['Result']) - len(y))/len(TestDict['Result']),"%"
+			print "Test Accuracy = ", (float(len(TestDict['Result']) - len(y))/len(TestDict['Result']))*100,"%"
 			#print len(y)
 		print "\n\n"
 
@@ -172,7 +173,6 @@ if('-setfold' in sys.argv and '-depthOn' not in sys.argv and '-mf' not in sys.ar
 
 ##--- For k fold validation
 elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-mf' not in sys.argv):
-	print "Here"
 	MaxAccuracy = 0.0
 	#AccuracyList = []
 	hyperDepth = 0
@@ -195,12 +195,12 @@ elif('-setfold' in sys.argv and '-depthOn' in sys.argv and foldValue > 1 and '-m
 						TrainingFileList.append(trainFilehandle[el])
 				ExampleDict = CreateExampleStruct(TrainingFileList)
 				Root = func.decideRoot(ExampleDict, GlobalAttrDict)
-				print "Current iteration Root: ", Root
-				print "Fixed Depth Limit: ", fixDepth
+				#print "Current iteration Root: ", Root
+				#print "Fixed Depth Limit: ", fixDepth
 				gRoot = graph.graph(Root, 'ROOT', ExampleDict, GlobalAttrDict, 0, fixDepth)
 				sFlag = gRoot.ID3()
 				depth = gRoot.getMaxDepth()
-				print "Tree Depth = ", depth ,"\n"
+				#print "Tree Depth = ", depth ,"\n"
 				y = func.Validate( gRoot, ExampleDict, ExampleDict['Result'])
 				y = func.Validate(gRoot, TestDict, TestDict['Result'])
 				#print "Y:" ,len(y)
@@ -385,7 +385,7 @@ elif('-setfold' in sys.argv and foldValue > 1 and '-mf' in sys.argv):
 		
 		avgAccMethod3 = 0	
 		AccucracyTracker = []
-		print "*** Starting K-fold cross validation for missing feature/Method-2 ***\n"
+		print "*** Starting K-fold cross validation for missing feature/Method-3 ***\n"
 		for it in range(0,foldValue):
 			TrainingFileList = []
 			ExampleDict = dict([])

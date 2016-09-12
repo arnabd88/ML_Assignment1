@@ -1,0 +1,48 @@
+<========================================================================>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ Starting Training Method-I ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*** Starting K-fold cross validation for missing feature/Method-1 ***
+
+Method-I =  98.6769570011 %
+
+*** Method-1 K-fold CV ends here ************************************
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ Starting Training Method-II ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*** Starting K-fold cross validation for missing feature/Method-2 ***
+
+Method-II =  98.6769570011 %
+
+*** Method-3 K-fold CV ends here ************************************
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ Starting Training Method-III ~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*** Starting K-fold cross validation for missing feature/Method-3 ***
+
+Method-III =  100.0 %
+
+*** Method-3 K-fold CV ends here ************************************
+
+--------------- Method-1/2/3 k-Fold Experiment Result Detail ---------------------
+Method-2           Average-Accuracy: 98.6769570011 %              Standard-Deviation: 2.95841408269
+Method-3           Average-Accuracy: 100.0 %              Standard-Deviation: 0.0
+Method-1           Average-Accuracy: 98.6769570011 %              Standard-Deviation: 2.95841408269
+
+
+
+Method3 Won - Train Full data using Method3 and Test
+TrainingAccuracy in Method3 =  100.0 %
+
+TestAccuracy in Method3 =  100.0 %
+
+
+
+
+
+
+
