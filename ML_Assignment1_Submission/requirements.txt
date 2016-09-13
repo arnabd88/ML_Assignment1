@@ -1,0 +1,2 @@
+Python version 2.7
+numpy library for math calculations
